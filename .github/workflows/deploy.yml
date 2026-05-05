@@ -5,40 +5,22 @@ on:
     branches:
       - main
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
       
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
           
-      - name: Install dependencies
-        run: flutter pub get
-        
-      - name: Build Web
-        run: flutter build web --release --base-href /almos_app/
-        
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - run: flutter pub get
+      
+      - run: flutter build web --release --base-href /almos_app/
+      
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          path: build/web
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/web
