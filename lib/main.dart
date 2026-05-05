@@ -1,4 +1,5 @@
 // Al-Moos Barber App - Initial Deployment Trigger
+// Final Public Activation Trigger
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'core/app_theme.dart';
