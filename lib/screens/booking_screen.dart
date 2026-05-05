@@ -41,76 +41,145 @@ class _BookingScreenState extends State<BookingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF1A1A2E),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.primary),
-          onPressed: () => Navigator.pop(context),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Color(0xFF1A1A2E), AppColors.background],
+          ),
         ),
-        title: const Text('احجز موعد', style: TextStyle(color: Colors.white)),
-        elevation: 0,
-      ),
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            padding: const EdgeInsets.only(bottom: 100),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(16, 16, 16, 4),
-                  child: Text('اختر حلاقك', style: TextStyle(color: AppColors.textSecondary, fontSize: 13)),
-                ),
-                _buildBarberItem(0, 'أبو خالد', 'قص + تشكيل لحية', '4.9', '120'),
-                _buildBarberItem(1, 'محمد علي', 'قص + صبغة', '4.7', '85'),
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(16, 20, 16, 8),
-                  child: Text('اختر التاريخ', style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold)),
-                ),
-                SizedBox(
-                  height: 80,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    itemCount: dates.length,
-                    itemBuilder: (context, index) => _buildDateChip(index),
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              pinned: true,
+              backgroundColor: const Color(0xFF1A1A2E),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.primary, size: 20),
+                onPressed: () => Navigator.pop(context),
+              ),
+              title: const Text('حجز موعد جديد', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+              centerTitle: true,
+              elevation: 0,
+            ),
+            SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
+                    child: Text('1. اختر حلاقك المفضل', style: TextStyle(color: AppColors.primary, fontSize: 13, fontWeight: FontWeight.bold)),
                   ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(16, 20, 16, 8),
-                  child: Text('المواعيد المتاحة', style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      childAspectRatio: 2.2,
-                      mainAxisSpacing: 10,
-                      crossAxisSpacing: 10,
+                  SizedBox(
+                    height: 140,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      children: [
+                        _buildBarberSelectCard(0, 'أبو خالد', '👨🏻‍💼', 'خبير قصات كلاسيكية'),
+                        _buildBarberSelectCard(1, 'محمد علي', '🧔🏻', 'خبير تشكيل لحية'),
+                        _buildBarberSelectCard(2, 'ياسين', '👨🏽‍🎨', 'خبير صبغة وتسريح'),
+                      ],
                     ),
-                    itemCount: slots.length,
-                    itemBuilder: (context, index) => _buildSlot(index),
                   ),
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(20, 30, 20, 15),
+                    child: Text('2. اختر التاريخ المناسب', style: TextStyle(color: AppColors.primary, fontSize: 13, fontWeight: FontWeight.bold)),
+                  ),
+                  SizedBox(
+                    height: 90,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      itemCount: dates.length,
+                      itemBuilder: (context, index) => _buildDateChip(index),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(20, 30, 20, 15),
+                    child: Text('3. اختر الوقت المتاح', style: TextStyle(color: AppColors.primary, fontSize: 13, fontWeight: FontWeight.bold)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        childAspectRatio: 2.2,
+                        mainAxisSpacing: 12,
+                        crossAxisSpacing: 12,
+                      ),
+                      itemCount: slots.length,
+                      itemBuilder: (context, index) => _buildSlot(index),
+                    ),
+                  ),
+                  const SizedBox(height: 120),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      bottomSheet: Container(
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
+        decoration: BoxDecoration(
+          color: const Color(0xFF1A1A2E),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.5), blurRadius: 20)],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('السعر التقريبي', style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+                    Text('8.00 د.أ', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w900)),
+                  ],
+                ),
+                ElevatedButton(
+                  onPressed: () => Navigator.pushNamed(context, '/payment'),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                  ),
+                  child: const Text('تأكيد الحجز', style: TextStyle(fontSize: 16)),
                 ),
               ],
             ),
-          ),
-          Positioned(
-            bottom: 20,
-            left: 16,
-            right: 16,
-            child: ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, '/payment'),
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 56),
-              ),
-              child: const Text('تأكيد الموعد — اذهب للدفع →'),
-            ),
-          ),
-        ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBarberSelectCard(int index, String name, String emoji, String sub) {
+    bool isSelected = selectedBarber == index;
+    return GestureDetector(
+      onTap: () => setState(() => selectedBarber = index),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        width: 140,
+        margin: const EdgeInsets.only(right: 12),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.primary.withOpacity(0.1) : AppColors.surface,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: isSelected ? AppColors.primary : Colors.white.withOpacity(0.05), width: 2),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(emoji, style: const TextStyle(fontSize: 32)),
+            const SizedBox(height: 8),
+            Text(name, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+            Text(sub, textAlign: TextAlign.center, style: const TextStyle(color: AppColors.textSecondary, fontSize: 10)),
+          ],
+        ),
       ),
     );
   }

@@ -14,89 +14,124 @@ class _PaymentScreenState extends State<PaymentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF1A1A2E),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.primary),
-          onPressed: () => Navigator.pop(context),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Color(0xFF1A1A2E), AppColors.background],
+          ),
         ),
-        title: const Text('الدفع', style: TextStyle(color: Colors.white)),
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: const EdgeInsets.all(16),
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.circular(20),
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              pinned: true,
+              backgroundColor: const Color(0xFF1A1A2E),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.primary, size: 20),
+                onPressed: () => Navigator.pop(context),
               ),
-              child: Column(
-                children: [
-                  _buildSummaryRow('الحلاق', 'أبو خالد'),
-                  _buildSummaryRow('التاريخ', 'الأحد 8 مايو'),
-                  _buildSummaryRow('الوقت', '10:30 ص'),
-                  const Divider(color: Color(0xFF252540), height: 32),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text('الإجمالي', style: TextStyle(color: AppColors.textSecondary, fontSize: 14)),
-                      Text('8.00 د.أ', style: TextStyle(color: AppColors.primary, fontSize: 18, fontWeight: FontWeight.bold)),
-                    ],
-                  ),
-                ],
-              ),
+              title: const Text('تفاصيل الحجز والدفع', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+              centerTitle: true,
+              elevation: 0,
             ),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(16, 12, 16, 10),
-              child: Text('طريقة الدفع', style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold)),
-            ),
-            _buildPaymentMethod(0, '💳', 'بطاقة فيزا / ماستر', 'دفع إلكتروني آمن'),
-            _buildPaymentMethod(1, '📱', 'محفظة إلكترونية', 'CliQ / زين كاش'),
-            Container(
-              margin: const EdgeInsets.all(16),
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: const Color(0xFFFF6464).withOpacity(0.08),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFFFF6464).withOpacity(0.2)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text('⚠️ سياسة الإلغاء', style: TextStyle(color: Color(0xFFFF6464), fontSize: 13, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 6),
-                  Text(
-                    '• إلغاء قبل ساعة من الموعد: استرداد 50% من المبلغ.\n• إلغاء قبل أقل من ساعة: لا يتم استرداد أي مبلغ.',
-                    style: TextStyle(color: AppColors.textSecondary, fontSize: 12, height: 1.6),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
-                onPressed: () => _showSuccessDialog(context),
-                style: ElevatedButton.styleFrom(minimumSize: const Size(double.infinity, 56)),
-                child: const Text('✅ ادفع الآن — 8.00 د.أ'),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 20),
+                    Container(
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        borderRadius: BorderRadius.circular(25),
+                        border: Border.all(color: Colors.white.withOpacity(0.05)),
+                        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 15)],
+                      ),
+                      child: Column(
+                        children: [
+                          _buildSummaryRow('الحلاق المختار', 'أبو خالد', '👨🏻‍💼'),
+                          _buildSummaryRow('تاريخ الموعد', 'الأحد، 8 مايو', '📅'),
+                          _buildSummaryRow('وقت الحجز', '10:30 صباحاً', '⏰'),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            child: Divider(color: Colors.white10),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Text('المبلغ الإجمالي', style: TextStyle(color: AppColors.textSecondary, fontSize: 14)),
+                              Text('8.00 د.أ', style: TextStyle(color: AppColors.primary, fontSize: 24, fontWeight: FontWeight.w900)),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(10, 30, 10, 15),
+                      child: Text('اختر وسيلة الدفع', style: TextStyle(color: AppColors.primary, fontSize: 13, fontWeight: FontWeight.bold)),
+                    ),
+                    _buildPaymentMethod(0, '💳', 'بطاقة فيزا / ماستر', 'دفع إلكتروني سريع ومؤمن'),
+                    _buildPaymentMethod(1, '📱', 'محفظة إلكترونية', 'CliQ / Zain Cash / Orange'),
+                    const SizedBox(height: 30),
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.red.withOpacity(0.05),
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(color: Colors.red.withOpacity(0.1)),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.info_outline_rounded, color: Colors.redAccent, size: 20),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              'إلغاء الموعد قبل أقل من ساعة قد يترتب عليه رسوم.',
+                              style: TextStyle(color: Colors.redAccent.withOpacity(0.8), fontSize: 11),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 120),
+                  ],
+                ),
               ),
             ),
           ],
         ),
       ),
+      bottomSheet: Container(
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
+        decoration: BoxDecoration(
+          color: const Color(0xFF1A1A2E),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.5), blurRadius: 20)],
+        ),
+        child: ElevatedButton(
+          onPressed: () => _showSuccessDialog(context),
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size(double.infinity, 60),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+          ),
+          child: const Text('تأكيد الدفع والإنهاء', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        ),
+      ),
     );
   }
 
-  Widget _buildSummaryRow(String label, String value) {
+  Widget _buildSummaryRow(String label, String value, String icon) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Text(icon, style: const TextStyle(fontSize: 18)),
+          const SizedBox(width: 12),
           Text(label, style: const TextStyle(color: AppColors.textSecondary, fontSize: 14)),
+          const Spacer(),
           Text(value, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
         ],
       ),
@@ -107,27 +142,29 @@ class _PaymentScreenState extends State<PaymentScreen> {
     bool isSelected = selectedMethod == index;
     return GestureDetector(
       onTap: () => setState(() => selectedMethod = index),
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-        padding: const EdgeInsets.all(16),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: isSelected ? AppColors.primary : Colors.transparent, width: 2),
+          color: isSelected ? AppColors.primary.withOpacity(0.05) : AppColors.surface,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: isSelected ? AppColors.primary : Colors.white.withOpacity(0.05), width: 2),
         ),
         child: Row(
           children: [
-            Text(icon, style: const TextStyle(fontSize: 28)),
-            const SizedBox(width: 12),
+            Text(icon, style: const TextStyle(fontSize: 32)),
+            const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(title, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
-                  Text(sub, style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+                  Text(sub, style: const TextStyle(color: AppColors.textSecondary, fontSize: 11)),
                 ],
               ),
             ),
+            if (isSelected) const Icon(Icons.check_circle_rounded, color: AppColors.primary),
           ],
         ),
       ),
